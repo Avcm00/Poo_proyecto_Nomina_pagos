@@ -1,0 +1,255 @@
+{% extends "base/base.html" %}
+{% block extra_css %}
+<style>
+    .detail-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .detail-section {
+        margin-bottom: 30px;
+    }
+    
+    .detail-section h4 {
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .detail-row {
+        display: flex;
+        margin-bottom: 15px;
+    }
+    
+    .detail-label {
+        width: 200px;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .detail-value {
+        flex-grow: 1;
+    }
+    
+    .actions-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        gap: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .detail-row {
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="page-title">
+            {% if modelo == 'empleado' %}
+                Detalle del Empleado
+            {% elif modelo == 'departamento' %}
+                Detalle del Departamento
+            {% elif modelo == 'cargo' %}
+                Detalle del Cargo
+            {% elif modelo == 'tipo_contrato' %}
+                Detalle del Tipo de Contrato
+            {% elif modelo == 'rol' %}
+                Detalle del Rol de Pago
+            {% endif %}
+        </h1>
+        <a href="{% url 'listar_modelo' modelo %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+    
+    <div class="detail-card">
+        <div class="detail-header">
+            <h3>
+                {% if modelo == 'empleado' %}
+                    {{ objeto.nombre }}
+                {% elif modelo == 'departamento' or modelo == 'cargo' or modelo == 'tipo_contrato' %}
+                    {{ objeto.descripcion }}
+                {% elif modelo == 'rol' %}
+                    Rol de Pago - {{ objeto.empleado }} ({{ objeto.aniomes|date:"F Y" }})
+                {% endif %}
+            </h3>
+            <div>
+                <span class="badge bg-primary">ID: {{ objeto.id }}</span>
+            </div>
+        </div>
+        
+        <div class="detail-content">
+            {% if modelo == 'empleado' %}
+                <div class="detail-section">
+                    <h4>Información Personal</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Nombre</div>
+                        <div class="detail-value">{{ objeto.nombre }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Cédula</div>
+                        <div class="detail-value">{{ objeto.cedula }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Sexo</div>
+                        <div class="detail-value">{{ objeto.get_sexo_display }}</div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>Información Laboral</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Cargo</div>
+                        <div class="detail-value">{{ objeto.cargo }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Departamento</div>
+                        <div class="detail-value">{{ objeto.departamento }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Tipo de Contrato</div>
+                        <div class="detail-value">{{ objeto.tipo_contrato }}</div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>Información Económica</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Sueldo Base</div>
+                        <div class="detail-value">${{ objeto.sueldo|floatformat:2 }}</div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>Información Adicional</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Dirección</div>
+                        <div class="detail-value">{{ objeto.direccion }}</div>
+                    </div>
+                </div>
+                
+            {% elif modelo == 'departamento' or modelo == 'cargo' or modelo == 'tipo_contrato' %}
+                <div class="detail-section">
+                    <h4>Detalles</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Descripción</div>
+                        <div class="detail-value">{{ objeto.descripcion }}</div>
+                    </div>
+                </div>
+                
+            {% elif modelo == 'rol' %}
+                <div class="detail-section">
+                    <h4>Información General</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Empleado</div>
+                        <div class="detail-value">{{ objeto.empleado }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Período</div>
+                        <div class="detail-value">{{ objeto.aniomes|date:"F Y" }}</div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>Detalles Económicos</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Sueldo Base</div>
+                        <div class="detail-value">${{ objeto.sueldo|floatformat:2 }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Horas Extra</div>
+                        <div class="detail-value">${{ objeto.horas_extra|floatformat:2 }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Bonos</div>
+                        <div class="detail-value">${{ objeto.bono|floatformat:2 }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">IESS</div>
+                        <div class="detail-value">${{ objeto.iess|floatformat:2 }}</div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4>Totales</h4>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Total Ingresos</div>
+                        <div class="detail-value">${{ objeto.tot_ing|floatformat:2 }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Total Descuentos</div>
+                        <div class="detail-value">${{ objeto.tot_des|floatformat:2 }}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Neto a Pagar</div>
+                        <div class="detail-value"><strong>${{ objeto.neto|floatformat:2 }}</strong></div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="actions-container">
+            <a href="{% url 'editar_modelo' modelo objeto.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <button class="btn btn-danger" onclick="confirmarEliminacion()">
+                <i class="fas fa-trash-alt"></i> Eliminar
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function confirmarEliminacion() {
+        if (confirm('¿Está seguro que desea eliminar este registro?')) {
+            // Aquí se puede hacer una solicitud AJAX para eliminar el registro
+            // O redirigir a una URL de eliminación
+            alert('Registro eliminado correctamente (simulación)');
+            window.location.href = "{% url 'listar_modelo' modelo %}";
+        }
+    }
+</script>
+{% endblock %}

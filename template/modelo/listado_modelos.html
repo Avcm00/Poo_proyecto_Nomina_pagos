@@ -1,0 +1,126 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{{ titulo }}</h1>
+    <a href="{% url 'nuevo_modelo' modelo %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nuevo {% if modelo == 'empleado' %}
+            Empleado
+        {% elif modelo == 'departamento' %}
+            Departamento
+        {% elif modelo == 'cargo' %}
+            Cargo
+        {% elif modelo == 'tipo_contrato' %}
+            Tipo de Contrato
+        {% elif modelo == 'rol' %}
+            Rol de Pago
+        {% endif %}
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Listado de Registros</h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    {% if modelo == 'empleado' %}
+                        <th>Nombre</th>
+                        <th>Cédula</th>
+                        <th>Departamento</th>
+                        <th>Cargo</th>
+                        <th>Sueldo</th>
+                    {% elif modelo == 'departamento' or modelo == 'cargo' or modelo == 'tipo_contrato' %}
+                        <th>Descripción</th>
+                    {% elif modelo == 'rol' %}
+                        <th>Empleado</th>
+                        <th>Periodo</th>
+                        <th>Sueldo</th>
+                        <th>Total Ingresos</th>
+                        <th>Total Descuentos</th>
+                        <th>Neto</th>
+                    {% endif %}
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for objeto in objetos %}
+                <tr>
+                    <td>{{ objeto.id }}</td>
+                    {% if modelo == 'empleado' %}
+                        <td>{{ objeto.nombre }}</td>
+                        <td>{{ objeto.cedula }}</td>
+                        <td>{{ objeto.departamento }}</td>
+                        <td>{{ objeto.cargo }}</td>
+                        <td>${{ objeto.sueldo }}</td>
+                    {% elif modelo == 'departamento' or modelo == 'cargo' or modelo == 'tipo_contrato' %}
+                        <td>{{ objeto.descripcion }}</td>
+                    {% elif modelo == 'rol' %}
+                        <td>{{ objeto.empleado.nombre }}</td>
+                        <td>{{ objeto.aniomes|date:"F Y" }}</td>
+                        <td>${{ objeto.sueldo }}</td>
+                        <td>${{ objeto.tot_ing }}</td>
+                        <td>${{ objeto.tot_des }}</td>
+                        <td>${{ objeto.neto }}</td>
+                    {% endif %}
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="{% url 'detalle_modelo' modelo objeto.id %}" class="btn btn-info" title="Ver detalle">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'editar_modelo' modelo objeto.id %}" class="btn btn-warning" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="button" class="btn btn-danger" title="Eliminar" 
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="{% if modelo == 'empleado' %}7{% elif modelo == 'departamento' or modelo == 'cargo' or modelo == 'tipo_contrato' %}3{% elif modelo == 'rol' %}8{% endif %}" class="text-center">
+                        No hay registros disponibles
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para confirmar eliminación -->
+<div class="modal fade" id="confirmarEliminacionModal" tabindex="-1" aria-labelledby="confirmarEliminacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminacionModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar este registro? Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="#" id="btnConfirmarEliminar" class="btn btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function confirmarEliminar(modelo, id) {
+        // Aquí habría que añadir la URL correcta para eliminar
+        document.getElementById('btnConfirmarEliminar').href = '/modelo/' + modelo + '/eliminar/' + id + '/';
+        
+        // Mostrar el modal (requiere Bootstrap JS)
+        var modal = new bootstrap.Modal(document.getElementById('confirmarEliminacionModal'));
+        modal.show();
+    }
+</script>
+{% endblock %}

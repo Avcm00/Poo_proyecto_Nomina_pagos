@@ -1,0 +1,350 @@
+{% extends "base/base.html" %}
+{% block extra_css %}
+<style>
+    .form-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .form-section {
+        margin-bottom: 20px;
+    }
+    
+    .form-section h4 {
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .form-label {
+        font-weight: 500;
+    }
+    
+    .actions-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="page-title">
+            {{ accion }} {% if modelo == 'empleado' %}
+                Empleado
+            {% elif modelo == 'departamento' %}
+                Departamento
+            {% elif modelo == 'cargo' %}
+                Cargo
+            {% elif modelo == 'tipo_contrato' %}
+                Tipo de Contrato
+            {% elif modelo == 'rol' %}
+                Rol de Pago
+            {% endif %}
+        </h1>
+        <a href="{% url 'listar_modelo' modelo %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </div>
+    
+    <div class="form-container">
+        <form method="post" action="">
+            {% csrf_token %}
+            
+            {% if modelo == 'empleado' %}
+                <div class="form-section">
+                    <h4>Información Personal</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" 
+                                   value="{{ objeto.nombre|default:'' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cedula" class="form-label">Cédula</label>
+                            <input type="text" class="form-control" id="cedula" name="cedula" 
+                                   value="{{ objeto.cedula|default:'' }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="sexo" class="form-label">Sexo</label>
+                            <select class="form-select" id="sexo" name="sexo" required>
+                                <option value="" {% if not objeto.sexo %}selected{% endif %}>Seleccione...</option>
+                                <option value="M" {% if objeto.sexo == 'M' %}selected{% endif %}>Masculino</option>
+                                <option value="F" {% if objeto.sexo == 'F' %}selected{% endif %}>Femenino</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <textarea class="form-control" id="direccion" name="direccion" rows="2">{{ objeto.direccion|default:'' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h4>Información Laboral</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="sueldo" class="form-label">Sueldo</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" step="0.01" class="form-control" id="sueldo" name="sueldo" 
+                                       value="{{ objeto.sueldo|default:'' }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cargo" class="form-label">Cargo</label>
+                            <select class="form-select" id="cargo" name="cargo" required>
+                                <option value="">Seleccione un cargo...</option>
+                                {% for cargo in cargos %}
+                                    <option value="{{ cargo.id }}" {% if objeto.cargo.id == cargo.id %}selected{% endif %}>
+                                        {{ cargo.descripcion }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="departamento" class="form-label">Departamento</label>
+                            <select class="form-select" id="departamento" name="departamento" required>
+                                <option value="">Seleccione un departamento...</option>
+                                {% for departamento in departamentos %}
+                                    <option value="{{ departamento.id }}" {% if objeto.departamento.id == departamento.id %}selected{% endif %}>
+                                        {{ departamento.descripcion }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tipo_contrato" class="form-label">Tipo de Contrato</label>
+                            <select class="form-select" id="tipo_contrato" name="tipo_contrato" required>
+                                <option value="">Seleccione un tipo de contrato...</option>
+                                {% for tipo_contrato in tipos_contrato %}
+                                    <option value="{{ tipo_contrato.id }}" {% if objeto.tipo_contrato.id == tipo_contrato.id %}selected{% endif %}>
+                                        {{ tipo_contrato.descripcion }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            
+            {% elif modelo == 'departamento' %}
+                <div class="form-section">
+                    <h4>Información del Departamento</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" 
+                                   value="{{ objeto.descripcion|default:'' }}" required>
+                        </div>
+                    </div>
+                </div>
+                
+            {% elif modelo == 'cargo' %}
+                <div class="form-section">
+                    <h4>Información del Cargo</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" 
+                                   value="{{ objeto.descripcion|default:'' }}" required>
+                        </div>
+                    </div>
+                </div>
+                
+            {% elif modelo == 'tipo_contrato' %}
+                <div class="form-section">
+                    <h4>Información del Tipo de Contrato</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" 
+                                   value="{{ objeto.descripcion|default:'' }}" required>
+                        </div>
+                    </div>
+                </div>
+                
+            {% elif modelo == 'rol' %}
+                <div class="form-section">
+                    <h4>Información del Rol de Pago</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="empleado" class="form-label">Empleado</label>
+                            <select class="form-select" id="empleado" name="empleado" required>
+                                <option value="">Seleccione un empleado...</option>
+                                {% for empleado in empleados %}
+                                    <option value="{{ empleado.id }}" {% if objeto.empleado.id == empleado.id %}selected{% endif %}>
+                                        {{ empleado.nombre }} - {{ empleado.cedula }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="aniomes" class="form-label">Año/Mes</label>
+                            <input type="month" class="form-control" id="aniomes" name="aniomes" 
+                                   value="{{ objeto.aniomes|date:'Y-m'|default:'' }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>Ingresos</h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="sueldo" class="form-label">Sueldo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="sueldo" name="sueldo" 
+                                           value="{{ objeto.sueldo|default:'' }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="horas_extra" class="form-label">Horas Extra</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="horas_extra" name="horas_extra" 
+                                           value="{{ objeto.horas_extra|default:'0.00' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bono" class="form-label">Bonos</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="bono" name="bono" 
+                                           value="{{ objeto.bono|default:'0.00' }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>Deducciones</h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="iess" class="form-label">IESS</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="iess" name="iess" 
+                                           value="{{ objeto.iess|default:'0.00' }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4>Totales</h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="tot_ing" class="form-label">Total Ingresos</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="tot_ing" name="tot_ing" 
+                                           value="{{ objeto.tot_ing|default:'0.00' }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tot_des" class="form-label">Total Descuentos</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="tot_des" name="tot_des" 
+                                           value="{{ objeto.tot_des|default:'0.00' }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="neto" class="form-label">Total Neto</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="neto" name="neto" 
+                                           value="{{ objeto.neto|default:'0.00' }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div class="actions-container">
+                <button type="button" class="btn btn-outline-secondary" onclick="window.history.back();">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if modelo == 'rol' %}
+<script>
+    // Script para calcular automáticamente los totales en el rol de pago
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener referencias a los campos
+        const sueldoInput = document.getElementById('sueldo');
+        const horasExtraInput = document.getElementById('horas_extra');
+        const bonoInput = document.getElementById('bono');
+        const iessInput = document.getElementById('iess');
+        const totIngInput = document.getElementById('tot_ing');
+        const totDesInput = document.getElementById('tot_des');
+        const netoInput = document.getElementById('neto');
+        
+        // Función para calcular los totales
+        function calcularTotales() {
+            // Convertir valores a números (si están vacíos, usar 0)
+            const sueldo = parseFloat(sueldoInput.value) || 0;
+            const horasExtra = parseFloat(horasExtraInput.value) || 0;
+            const bono = parseFloat(bonoInput.value) || 0;
+            const iess = parseFloat(iessInput.value) || 0;
+            
+            // Calcular totales
+            const totalIngresos = sueldo + horasExtra + bono;
+            const totalDescuentos = iess;
+            const totalNeto = totalIngresos - totalDescuentos;
+            
+            // Asignar valores redondeados a 2 decimales
+            totIngInput.value = totalIngresos.toFixed(2);
+            totDesInput.value = totalDescuentos.toFixed(2);
+            netoInput.value = totalNeto.toFixed(2);
+        }
+        
+        // Asignar event listeners a los campos que afectan los cálculos
+        [sueldoInput, horasExtraInput, bonoInput, iessInput].forEach(input => {
+            input.addEventListener('input', calcularTotales);
+        });
+        
+        // Calcular totales iniciales
+        calcularTotales();
+    });
+</script>
+{% endif %}
+{% endblock %}
