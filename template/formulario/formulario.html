@@ -1,0 +1,115 @@
+{% extends "base/base.html" %}
+    {% block extra_css %}
+    <style>
+        
+        .form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .form-footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body class="bg-light">
+    {% block content %}
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Formulario Personalizable</h2>
+                <p class="text-muted">Este es un formulario base que puedes modificar según tus necesidades</p>
+            </div>
+            
+            <form id="formularioGeneral">
+                <!-- Información Personal -->
+                <div class="mb-4">
+                    <h4>Información Personal</h4>
+                    <hr>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre">
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" placeholder="ejemplo@correo.com">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="telefono" placeholder="Ingresa tu teléfono">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dni" class="form-label">Cedula</label>
+                            <input type="tel" class="form-control" id="dni" placeholder="Ingresa tu numero de Cedula">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dirección -->
+                <div class="mb-4">
+                    <h4>Dirección</h4>
+                    <hr>
+                    
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" placeholder="Ingresa tu dirección">
+                    </div>
+                    
+                    
+                </div>
+                
+                <!-- Área de Texto -->
+                <div class="mb-4">        
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terminos">
+                        <label class="form-check-label" for="terminos">Acepto los términos y condiciones</label>
+                    </div>
+                </div>
+                
+                <!-- Botones -->
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endblock %}
+     {% block scripts %}
+    <!-- Bootstrap JS (opcional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+   {% endblock %}
+</body>
+</html>

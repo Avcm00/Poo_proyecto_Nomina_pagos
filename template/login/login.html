@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login y Registro</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome para iconos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+      height: 100vh;
+    }
+    .card {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      border: none;
+    }
+    .login-card {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .btn-primary {
+      background-color: #4e73df;
+      border-color: #4e73df;
+    }
+    .btn-primary:hover {
+      background-color: #2e59d9;
+      border-color: #2e59d9;
+    }
+    .form-control:focus {
+      border-color: #4e73df;
+      box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+    .card-header {
+      background-color: white;
+      border-bottom: none;
+      text-align: center;
+      padding-top: 30px;
+    }
+    .card-footer {
+      background-color: white;
+      border-top: none;
+      text-align: center;
+    }
+    .nav-tabs .nav-link {
+      color: #6c757d;
+      font-weight: 500;
+    }
+    .nav-tabs .nav-link.active {
+      color: #4e73df;
+      font-weight: 600;
+      border-bottom: 2px solid #4e73df;
+    }
+    .brand-logo {
+      font-size: 24px;
+      color: #4e73df;
+      margin-bottom: 20px;
+    }
+    .social-btn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .btn-google {
+      background-color: #ea4335;
+      color: white;
+    }
+    .btn-facebook {
+      background-color: #3b5998;
+      color: white;
+    }
+    .divider-text {
+      position: relative;
+      text-align: center;
+      margin: 15px 0;
+    }
+    .divider-text span {
+      padding: 0 10px;
+      background: white;
+      position: relative;
+      z-index: 2;
+    }
+    .divider-text:after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      top: 50%;
+      left: 0;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-12">
+        <div class="card login-card">
+          <div class="card-header">
+            <div class="brand-logo">
+              <i class="fas fa-lock"></i> SecureLogin
+            </div>
+            <ul class="nav nav-tabs card-header-tabs" id="auth-tabs" role="tablist">
+              <li class="nav-item w-50 text-center">
+                <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Iniciar Sesión</a>
+              </li>
+              <li class="nav-item w-50 text-center">
+                <a class="nav-link" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Registrarse</a>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="card-body">
+            <div class="tab-content" id="auth-tabs-content">
+              <!-- Formulario de Login -->
+              <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <form id="login-form">
+                  <div class="mb-3">
+                    <button type="button" class="btn btn-google social-btn">
+                      <i class="fab fa-google me-2"></i> Iniciar con Google
+                    </button>
+                    <button type="button" class="btn btn-facebook social-btn">
+                      <i class="fab fa-facebook-f me-2"></i> Iniciar con Facebook
+                    </button>
+                  </div>
+                  <div class="divider-text">
+                    <span>o usa tu correo</span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="login-email" class="form-label">Correo electrónico</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                      <input type="email" class="form-control" id="login-email" placeholder="nombre@ejemplo.com" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="login-password" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-key"></i></span>
+                      <input type="password" class="form-control" id="login-password" placeholder="Ingresa tu contraseña" required>
+                    </div>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember-me">
+                    <label class="form-check-label" for="remember-me">Recordarme</label>
+                    <a href="#" class="float-end">¿Olvidaste tu contraseña?</a>
+                  </div>
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                  </div>
+                </form>
+              </div>
+              
+              <!-- Formulario de Registro -->
+              <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                <form id="register-form">
+                  <div class="mb-3">
+                    <button type="button" class="btn btn-google social-btn">
+                      <i class="fab fa-google me-2"></i> Registrarse con Google
+                    </button>
+                    <button type="button" class="btn btn-facebook social-btn">
+                      <i class="fab fa-facebook-f me-2"></i> Registrarse con Facebook
+                    </button>
+                  </div>
+                  <div class="divider-text">
+                    <span>o crea una cuenta</span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="register-name" class="form-label">Nombre completo</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                      <input type="text" class="form-control" id="register-name" placeholder="Nombre completo" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="register-email" class="form-label">Correo electrónico</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                      <input type="email" class="form-control" id="register-email" placeholder="nombre@ejemplo.com" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="register-password" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-key"></i></span>
+                      <input type="password" class="form-control" id="register-password" placeholder="Crea una contraseña" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="register-confirm-password" class="form-label">Confirmar contraseña</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                      <input type="password" class="form-control" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
+                    </div>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="terms" required>
+                    <label class="form-check-label" for="terms">Acepto los <a href="#">Términos y Condiciones</a></label>
+                  </div>
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card-footer text-muted">
+            <p class="mb-0">&copy; 2025 SecureLogin. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS con Popper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Script para la funcionalidad -->
+  <script>
+    // Esperar a que el documento esté completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+      // Capturar el formulario de login
+      const loginForm = document.getElementById('login-form');
+      // Capturar el formulario de registro
+      const registerForm = document.getElementById('register-form');
+      
+      // Manejar el envío del formulario de login
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevenir el envío normal del formulario
+          
+          // Capturar los valores de los campos
+          const email = document.getElementById('login-email').value;
+          const password = document.getElementById('login-password').value;
+          const rememberMe = document.getElementById('remember-me').checked;
+          
+          // Aquí puedes implementar la lógica para enviar los datos al servidor
+          console.log('Intento de login con:', { email, password, rememberMe });
+          
+          // Ejemplo básico de validación
+          if (email && password) {
+            // Simular una petición al servidor
+            simulateServerRequest('login', { email, password, rememberMe })
+              .then(response => {
+                if (response.success) {
+                  alert('¡Login exitoso!');
+                  // Aquí puedes redirigir al usuario a la página principal
+                  // window.location.href = 'dashboard.html';
+                } else {
+                  alert('Error: ' + response.message);
+                }
+              });
+          } else {
+            alert('Por favor, completa todos los campos.');
+          }
+        });
+      }
+      
+      // Manejar el envío del formulario de registro
+      if (registerForm) {
+        registerForm.addEventListener('submit', function(event) {
+          event.preventDefault(); // Prevenir el envío normal del formulario
+          
+          // Capturar los valores de los campos
+          const name = document.getElementById('register-name').value;
+          const email = document.getElementById('register-email').value;
+          const password = document.getElementById('register-password').value;
+          const confirmPassword = document.getElementById('register-confirm-password').value;
+          const termsAccepted = document.getElementById('terms').checked;
+          
+          // Validación básica
+          if (!name || !email || !password || !confirmPassword) {
+            alert('Por favor, completa todos los campos.');
+            return;
+          }
+          
+          if (password !== confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            return;
+          }
+          
+          if (!termsAccepted) {
+            alert('Debes aceptar los términos y condiciones.');
+            return;
+          }
+          
+          // Aquí puedes implementar la lógica para enviar los datos al servidor
+          console.log('Intento de registro con:', { name, email, password });
+          
+          // Simular una petición al servidor
+          simulateServerRequest('register', { name, email, password })
+            .then(response => {
+              if (response.success) {
+                alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+                
+                // Limpiar el formulario
+                registerForm.reset();
+                
+                // Cambiar a la pestaña de login
+                document.getElementById('login-tab').click();
+              } else {
+                alert('Error: ' + response.message);
+              }
+            });
+        });
+      }
+      
+      // Función para simular una petición al servidor
+      function simulateServerRequest(type, data) {
+        return new Promise((resolve) => {
+          // Simulamos una demora de red
+          setTimeout(() => {
+            // En un caso real, aquí harías una llamada fetch() o axios.post()
+            if (type === 'login') {
+              // Simular una validación simple de credenciales
+              if (data.email === 'usuario@ejemplo.com' && data.password === '12345') {
+                resolve({ success: true, message: 'Login exitoso', user: { name: 'Usuario Demo' } });
+              } else {
+                resolve({ success: false, message: 'Credenciales incorrectas' });
+              }
+            } else if (type === 'register') {
+              // Simular registro (siempre exitoso para este ejemplo)
+              resolve({ success: true, message: 'Usuario registrado correctamente' });
+            }
+          }, 1000); // Simular 1 segundo de demora
+        });
+      }
+    });
+  </script>
+</body>
+</html>

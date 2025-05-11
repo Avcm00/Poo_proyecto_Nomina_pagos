@@ -1,0 +1,257 @@
+{% extends "base/base.html" %}
+{% block content %}
+  
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-employees">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>124</h4>
+                            <p>Empleados Activos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon icon-departments">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>8</h4>
+                            <p>Departamentos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon icon-payroll">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>92</h4>
+                            <p>Roles este mes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon icon-contracts">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h4>12</h4>
+                            <p>Contratos Nuevos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content Cards -->
+                <div class="content-cards">
+                    <!-- Left Column -->
+                    <div>
+                        <!-- Recent Payrolls -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Roles de Pago Recientes</h3>
+                                <span class="more">Ver todos</span>
+                            </div>
+                            <div class="card-content">
+                                <table class="recent-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Empleado</th>
+                                            <th>Departamento</th>
+                                            <th>Fecha</th>
+                                            <th>Monto</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Carlos Mendoza</td>
+                                            <td>Desarrollo</td>
+                                            <td>05/05/2025</td>
+                                            <td>$1,250.00</td>
+                                            <td><span class="status status-paid">Pagado</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>María González</td>
+                                            <td>Recursos Humanos</td>
+                                            <td>05/05/2025</td>
+                                            <td>$1,100.00</td>
+                                            <td><span class="status status-paid">Pagado</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Juan Pérez</td>
+                                            <td>Marketing</td>
+                                            <td>04/05/2025</td>
+                                            <td>$980.00</td>
+                                            <td><span class="status status-paid">Pagado</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lucía Fernández</td>
+                                            <td>Ventas</td>
+                                            <td>03/05/2025</td>
+                                            <td>$1,420.00</td>
+                                            <td><span class="status status-processing">Procesando</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Roberto Díaz</td>
+                                            <td>Finanzas</td>
+                                            <td>03/05/2025</td>
+                                            <td>$1,350.00</td>
+                                            <td><span class="status status-pending">Pendiente</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Acciones Rápidas</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="quick-actions">
+                                    <div class="action-button">
+                                        <i class="fas fa-user-plus"></i>
+                                        <span>Nuevo Empleado</span>
+                                    </div>
+                                    <div class="action-button">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        <span>Generar Nómina</span>
+                                    </div>
+                                    <div class="action-button">
+                                        <i class="fas fa-file-export"></i>
+                                        <span>Exportar Reportes</span>
+                                    </div>
+                                    <div class="action-button">
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Ver Estadísticas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Calendar -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Calendario</h3>
+                                <span class="more">Mayo 2025</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="calendar-header">
+                                    <div class="nav">
+                                        <i class="fas fa-chevron-left"></i>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                                <div class="calendar">
+                                    <div class="weekday">Lu</div>
+                                    <div class="weekday">Ma</div>
+                                    <div class="weekday">Mi</div>
+                                    <div class="weekday">Ju</div>
+                                    <div class="weekday">Vi</div>
+                                    <div class="weekday">Sa</div>
+                                    <div class="weekday">Do</div>
+                                    
+                                    <div class="day">28</div>
+                                    <div class="day">29</div>
+                                    <div class="day">30</div>
+                                    <div class="day">1</div>
+                                    <div class="day">2</div>
+                                    <div class="day">3</div>
+                                    <div class="day">4</div>
+                                    
+                                    <div class="day">5</div>
+                                    <div class="day">6</div>
+                                    <div class="day">7</div>
+                                    <div class="day">8</div>
+                                    <div class="day">9</div>
+                                    <div class="day current">10</div>
+                                    <div class="day">11</div>
+                                    
+                                    <div class="day">12</div>
+                                    <div class="day has-event">13</div>
+                                    <div class="day">14</div>
+                                    <div class="day has-event">15</div>
+                                    <div class="day">16</div>
+                                    <div class="day">17</div>
+                                    <div class="day">18</div>
+                                    
+                                    <div class="day">19</div>
+                                    <div class="day">20</div>
+                                    <div class="day">21</div>
+                                    <div class="day">22</div>
+                                    <div class="day">23</div>
+                                    <div class="day">24</div>
+                                    <div class="day">25</div>
+                                    
+                                    <div class="day">26</div>
+                                    <div class="day has-event">27</div>
+                                    <div class="day">28</div>
+                                    <div class="day has-event">29</div>
+                                    <div class="day">30</div>
+                                    <div class="day">31</div>
+                                    <div class="day">1</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Activity -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Actividad Reciente</h3>
+                                <span class="more">Ver todo</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Nuevo empleado registrado</h4>
+                                        <p>Andrés López - Dpto. Desarrollo</p>
+                                        <span class="activity-time">Hace 2 horas</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Nómina generada</h4>
+                                        <p>92 roles de pago procesados</p>
+                                        <span class="activity-time">Hace 5 horas</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Transferencia de departamento</h4>
+                                        <p>Carmen Suárez: RRHH → Marketing</p>
+                                        <span class="activity-time">Ayer</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-file-contract"></i>
+                                    </div>
+                                    <div class="activity-info">
+                                        <h4>Contrato actualizado</h4>
+                                        <p>Roberto Díaz - Renovación 2 años</p>
+                                        <span class="activity-time">09/05/2025</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      {% endblock %}
