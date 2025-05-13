@@ -114,13 +114,5 @@
 
 {% block scripts %}
 <script>
-    function confirmarEliminar(modelo, id) {
-        // Aquí habría que añadir la URL correcta para eliminar
-        document.getElementById('btnConfirmarEliminar').href = '/modelo/' + modelo + '/eliminar/' + id + '/';
-        
-        // Mostrar el modal (requiere Bootstrap JS)
-        var modal = new bootstrap.Modal(document.getElementById('confirmarEliminacionModal'));
-        modal.show();
-    }
 </script>
 {% endblock %}

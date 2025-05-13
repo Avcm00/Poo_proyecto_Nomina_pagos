@@ -1,9 +1,58 @@
+from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login as auth_login, logout, authenticate
+from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Empleado, Departamento, Cargo, TipoContrato, Rol
 
+
 def login(request):
-    return render(request, "login/login.html")
+    form = UserCreationForm
+    
+    if request.method == 'GET':
+        return render(request, 'login/login.html', {"form": form})
+    else:
+        # Verificamos si el formulario enviado es de registro o inicio de sesión
+        form_type = request.POST.get('form_type', '')
+        
+        if form_type == 'register':
+            # Lógica para el registro
+            if request.POST["password1"] == request.POST["password2"]:
+                try:
+                    user = User.objects.create_user(
+                        request.POST["username"], 
+                        password=request.POST["password1"]
+                    )
+                    user.save()
+                    auth_login(request, user)
+                except IntegrityError:
+                    return render(request, 'login/login.html', {
+                        "form": form, 
+                        "error": "El nombre de usuario ya existe.",
+                        "active_tab": "register"  
+                    })
+            return render(request, 'login/login.html', {
+                "form": form, 
+                "error": "Las contraseñas no coinciden.",
+                "active_tab": "register"  
+            })
+        else:
+            # Lógica para el inicio de sesión
+            user = authenticate(
+                request, 
+                username=request.POST['username'], 
+                password=request.POST['password']
+            )
+            if user is None:
+                return render(request, 'login/login.html', {
+                    "form": form, 
+                    "error": "El nombre de usuario o la contraseña son incorrectos.",
+                    "active_tab": "login"  # Para mantener la pestaña de login activa
+                })
+            
+            auth_login(request, user)
+            return redirect('index')
   
 def index(request):
     empleados = Empleado.objects.count()
@@ -29,12 +78,6 @@ def index(request):
 
 
 def listar_modelo(request, modelo=None):
-    """
-    Vista dinámica que muestra un listado de cualquier modelo según el parámetro.
-    
-    Parámetros:
-    - modelo: String con el nombre del modelo a mostrar (empleado, departamento, cargo, tipo_contrato, rol)
-    """
     # Diccionario que mapea nombres de modelos a las clases correspondientes
     modelos = {
         'empleado': Empleado,
@@ -74,14 +117,7 @@ def listar_modelo(request, modelo=None):
     return render(request, "modelo/listado_modelos.html", contexto)
 
 def detalle_modelo(request, modelo=None, id=None):
-    """
-    Vista para mostrar el detalle de un registro específico.
-    
-    Parámetros:
-    - modelo: String con el nombre del modelo a mostrar
-    - id: ID del registro a mostrar
-    """
-    # Diccionario que mapea nombres de modelos a las clases correspondientes
+
     modelos = {
         'empleado': Empleado,
         'departamento': Departamento,
@@ -90,18 +126,14 @@ def detalle_modelo(request, modelo=None, id=None):
         'rol': Rol,
     }
     
-    # Si no se especifica un modelo o el modelo no existe, redirigir al inicio
     if not modelo or modelo not in modelos or not id:
         messages.error(request, "Modelo o ID no válido")
         return redirect('index')
     
-    # Obtener el modelo seleccionado
     modelo_seleccionado = modelos[modelo]
     
-    # Obtener el objeto específico o retornar 404 si no existe
     objeto = get_object_or_404(modelo_seleccionado, pk=id)
     
-    # Contexto para la plantilla
     contexto = {
         'objeto': objeto,
         'modelo': modelo,
@@ -110,14 +142,6 @@ def detalle_modelo(request, modelo=None, id=None):
     return render(request, "modelo/detalle_modelo.html", contexto)
 
 def formulario_modelo(request, modelo=None, id=None):
-    """
-    Vista para crear o editar un registro.
-    
-    Parámetros:
-    - modelo: String con el nombre del modelo a editar/crear
-    - id: ID del registro a editar (None para crear nuevo)
-    """
-    # Diccionario que mapea nombres de modelos a las clases correspondientes
     modelos = {
         'empleado': Empleado,
         'departamento': Departamento,
@@ -126,54 +150,36 @@ def formulario_modelo(request, modelo=None, id=None):
         'rol': Rol,
     }
     
-    # Si no se especifica un modelo o el modelo no existe, redirigir al inicio
     if not modelo or modelo not in modelos:
         messages.error(request, "Modelo no válido")
         return redirect('index')
-    
-    # Obtener el modelo seleccionado
+
     modelo_seleccionado = modelos[modelo]
-    
-    # Inicializar variables
     objeto = None
     accion = "Crear"
-    
-    # Si se proporciona ID, es una edición
     if id:
         objeto = get_object_or_404(modelo_seleccionado, pk=id)
         accion = "Editar"
-    
-    # Inicializar contexto
     contexto = {
         'objeto': objeto,
         'modelo': modelo,
         'accion': accion,
     }
-    
-    # Agregar datos adicionales al contexto según el modelo
     if modelo == 'empleado':
         contexto['departamentos'] = Departamento.objects.all()
         contexto['cargos'] = Cargo.objects.all()
         contexto['tipos_contrato'] = TipoContrato.objects.all()
     elif modelo == 'rol':
         contexto['empleados'] = Empleado.objects.all()
-    
-    # Procesar el formulario si es POST
     if request.method == 'POST':
-        # Crear un nuevo objeto o actualizar uno existente
         if id:
-            # Actualizar objeto existente
             if modelo == 'empleado':
                 # Procesamiento específico para Empleado
                 objeto.nombre = request.POST.get('nombre')
-                objeto.apellido = request.POST.get('apellido')
                 objeto.cedula = request.POST.get('cedula')
                 objeto.direccion = request.POST.get('direccion')
                 objeto.telefono = request.POST.get('telefono')
-                objeto.email = request.POST.get('email')
-                objeto.fecha_nacimiento = request.POST.get('fecha_nacimiento')
-                objeto.fecha_contratacion = request.POST.get('fecha_contratacion')
-                objeto.salario_base = float(request.POST.get('salario_base', 0))
+                objeto.sueldo = float(request.POST.get('sueldo', 0))
                 departamento_id = request.POST.get('departamento')
                 cargo_id = request.POST.get('cargo')
                 tipo_contrato_id = request.POST.get('tipo_contrato')
@@ -235,16 +241,12 @@ def formulario_modelo(request, modelo=None, id=None):
                 
                 objeto = Empleado(
                     nombre=request.POST.get('nombre'),
-                    apellido=request.POST.get('apellido'),
                     cedula=request.POST.get('cedula'),
+                    sexo= request.POST.get('sexo'), 
                     direccion=request.POST.get('direccion'),
-                    telefono=request.POST.get('telefono'),
-                    email=request.POST.get('email'),
-                    fecha_nacimiento=request.POST.get('fecha_nacimiento'),
-                    fecha_contratacion=request.POST.get('fecha_contratacion'),
-                    salario_base=float(request.POST.get('salario_base', 0)),
-                    departamento=departamento,
+                    sueldo=float(request.POST.get('sueldo', 0)),
                     cargo=cargo,
+                    departamento=departamento,
                     tipo_contrato=tipo_contrato
                 )
                 
@@ -285,30 +287,14 @@ def formulario_modelo(request, modelo=None, id=None):
                     bonificaciones=float(request.POST.get('bonificaciones', 0)),
                     empleado=empleado
                 )
-                
-                # Calcular total para el nuevo rol
-                
-        
-        # Guardar el objeto
+                     
         objeto.save()
-        
-        # Mensaje de éxito
         messages.success(request, f"{accion} {modelo} realizado con éxito!")
-        
-        # Redirigir al listado
         return redirect('listar_modelo', modelo=modelo)
     
     return render(request, "modelo/formulario_modelo.html", contexto)
 
 def eliminar_modelo(request, modelo=None, id=None):
-    """
-    Vista para eliminar un registro.
-    
-    Parámetros:
-    - modelo: String con el nombre del modelo a eliminar
-    - id: ID del registro a eliminar
-    """
-    # Diccionario que mapea nombres de modelos a las clases correspondientes
     modelos = {
         'empleado': Empleado,
         'departamento': Departamento,
@@ -316,32 +302,20 @@ def eliminar_modelo(request, modelo=None, id=None):
         'tipo_contrato': TipoContrato,
         'rol': Rol,
     }
-    
-    # Si no se especifica un modelo o el modelo no existe, redirigir al inicio
     if not modelo or modelo not in modelos or not id:
         messages.error(request, "Modelo o ID no válido")
         return redirect('index')
-    
-    # Obtener el modelo seleccionado
     modelo_seleccionado = modelos[modelo]
-    
-    # Obtener el objeto específico o retornar 404 si no existe
     objeto = get_object_or_404(modelo_seleccionado, pk=id)
     
     if request.method == 'POST':
-        # Eliminar el objeto
         objeto.delete()
-        
-        # Mensaje de éxito
         messages.success(request, f"{modelo.capitalize()} eliminado con éxito!")
-        
-        # Redirigir al listado
         return redirect('listar_modelo', modelo=modelo)
-    
-    # Si es GET, mostrar confirmación de eliminación
+
     contexto = {
         'objeto': objeto,
         'modelo': modelo,
     }
     
-    return render(request, "confirmar_eliminacion.html", contexto)
+    return render(request, "eliminacion.html", contexto)

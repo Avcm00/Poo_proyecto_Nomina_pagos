@@ -91,6 +91,15 @@
       left: 0;
       z-index: 1;
     }
+    .error-message {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #f8d7da;
+      border-radius: 4px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -104,48 +113,47 @@
             </div>
             <ul class="nav nav-tabs card-header-tabs" id="auth-tabs" role="tablist">
               <li class="nav-item w-50 text-center">
-                <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Iniciar Sesión</a>
+                <a class="nav-link {% if active_tab != 'register' %}active{% endif %}" id="login-tab" data-bs-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Iniciar Sesión</a>
               </li>
               <li class="nav-item w-50 text-center">
-                <a class="nav-link" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Registrarse</a>
+                <a class="nav-link {% if active_tab == 'register' %}active{% endif %}" id="register-tab" data-bs-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Registrarse</a>
               </li>
             </ul>
           </div>
           
           <div class="card-body">
+            {% if error %}
+            <div class="error-message">
+              {{ error }}
+            </div>
+            {% endif %}
+            
             <div class="tab-content" id="auth-tabs-content">
               <!-- Formulario de Login -->
-              <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                <form id="login-form">
-                  <div class="mb-3">
-                    <button type="button" class="btn btn-google social-btn">
-                      <i class="fab fa-google me-2"></i> Iniciar con Google
-                    </button>
-                    <button type="button" class="btn btn-facebook social-btn">
-                      <i class="fab fa-facebook-f me-2"></i> Iniciar con Facebook
-                    </button>
-                  </div>
+              <div class="tab-pane fade {% if active_tab != 'register' %}show active{% endif %}" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <form id="login-form" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="form_type" value="login">
                   <div class="divider-text">
-                    <span>o usa tu correo</span>
+                    <span></span>
                   </div>
                   <div class="mb-3">
-                    <label for="login-email" class="form-label">Correo electrónico</label>
+                    <label for="login-username" class="form-label">Username</label>
                     <div class="input-group">
-                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                      <input type="email" class="form-control" id="login-email" placeholder="nombre@ejemplo.com" required>
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                      <input type="text" class="form-control" id="login-username" name="username" placeholder="Escribe tu nombre de usuario" required>
                     </div>
                   </div>
                   <div class="mb-3">
                     <label for="login-password" class="form-label">Contraseña</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="fas fa-key"></i></span>
-                      <input type="password" class="form-control" id="login-password" placeholder="Ingresa tu contraseña" required>
+                      <input type="password" class="form-control" id="login-password" name="password" placeholder="Ingresa tu contraseña" required>
                     </div>
                   </div>
                   <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="remember-me">
+                    <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
                     <label class="form-check-label" for="remember-me">Recordarme</label>
-                    <a href="#" class="float-end">¿Olvidaste tu contraseña?</a>
                   </div>
                   <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
@@ -154,45 +162,32 @@
               </div>
               
               <!-- Formulario de Registro -->
-              <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                <form id="register-form">
-                  <div class="mb-3">
-                    <button type="button" class="btn btn-google social-btn">
-                      <i class="fab fa-google me-2"></i> Registrarse con Google
-                    </button>
-                    <button type="button" class="btn btn-facebook social-btn">
-                      <i class="fab fa-facebook-f me-2"></i> Registrarse con Facebook
-                    </button>
-                  </div>
+              <div class="tab-pane fade {% if active_tab == 'register' %}show active{% endif %}" id="register" role="tabpanel" aria-labelledby="register-tab">
+                <form id="register-form" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="form_type" value="register">
                   <div class="divider-text">
-                    <span>o crea una cuenta</span>
+                    <span></span>
                   </div>
                   <div class="mb-3">
-                    <label for="register-name" class="form-label">Nombre completo</label>
+                    <label for="register-username" class="form-label">Username</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="fas fa-user"></i></span>
-                      <input type="text" class="form-control" id="register-name" placeholder="Nombre completo" required>
+                      <input type="text" class="form-control" id="register-username" name="username" placeholder="Escribe tu nombre de usuario" required>
                     </div>
                   </div>
                   <div class="mb-3">
-                    <label for="register-email" class="form-label">Correo electrónico</label>
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                      <input type="email" class="form-control" id="register-email" placeholder="nombre@ejemplo.com" required>
-                    </div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="register-password" class="form-label">Contraseña</label>
+                    <label for="register-password1" class="form-label">Contraseña</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="fas fa-key"></i></span>
-                      <input type="password" class="form-control" id="register-password" placeholder="Crea una contraseña" required>
+                      <input type="password" class="form-control" id="register-password1" name="password1" placeholder="Crea una contraseña" required>
                     </div>
                   </div>
                   <div class="mb-3">
-                    <label for="register-confirm-password" class="form-label">Confirmar contraseña</label>
+                    <label for="register-password2" class="form-label">Confirmar contraseña</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                      <input type="password" class="form-control" id="register-confirm-password" placeholder="Confirma tu contraseña" required>
+                      <input type="password" class="form-control" id="register-password2" name="password2" placeholder="Confirma tu contraseña" required>
                     </div>
                   </div>
                   <div class="mb-3 form-check">
@@ -222,112 +217,14 @@
   <script>
     // Esperar a que el documento esté completamente cargado
     document.addEventListener('DOMContentLoaded', function() {
-      // Capturar el formulario de login
-      const loginForm = document.getElementById('login-form');
-      // Capturar el formulario de registro
-      const registerForm = document.getElementById('register-form');
-      
-      // Manejar el envío del formulario de login
-      if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
-          event.preventDefault(); // Prevenir el envío normal del formulario
-          
-          // Capturar los valores de los campos
-          const email = document.getElementById('login-email').value;
-          const password = document.getElementById('login-password').value;
-          const rememberMe = document.getElementById('remember-me').checked;
-          
-          // Aquí puedes implementar la lógica para enviar los datos al servidor
-          console.log('Intento de login con:', { email, password, rememberMe });
-          
-          // Ejemplo básico de validación
-          if (email && password) {
-            // Simular una petición al servidor
-            simulateServerRequest('login', { email, password, rememberMe })
-              .then(response => {
-                if (response.success) {
-                  alert('¡Login exitoso!');
-                  // Aquí puedes redirigir al usuario a la página principal
-                  // window.location.href = 'dashboard.html';
-                } else {
-                  alert('Error: ' + response.message);
-                }
-              });
-          } else {
-            alert('Por favor, completa todos los campos.');
-          }
-        });
-      }
-      
-      // Manejar el envío del formulario de registro
-      if (registerForm) {
-        registerForm.addEventListener('submit', function(event) {
-          event.preventDefault(); // Prevenir el envío normal del formulario
-          
-          // Capturar los valores de los campos
-          const name = document.getElementById('register-name').value;
-          const email = document.getElementById('register-email').value;
-          const password = document.getElementById('register-password').value;
-          const confirmPassword = document.getElementById('register-confirm-password').value;
-          const termsAccepted = document.getElementById('terms').checked;
-          
-          // Validación básica
-          if (!name || !email || !password || !confirmPassword) {
-            alert('Por favor, completa todos los campos.');
-            return;
-          }
-          
-          if (password !== confirmPassword) {
-            alert('Las contraseñas no coinciden.');
-            return;
-          }
-          
-          if (!termsAccepted) {
-            alert('Debes aceptar los términos y condiciones.');
-            return;
-          }
-          
-          // Aquí puedes implementar la lógica para enviar los datos al servidor
-          console.log('Intento de registro con:', { name, email, password });
-          
-          // Simular una petición al servidor
-          simulateServerRequest('register', { name, email, password })
-            .then(response => {
-              if (response.success) {
-                alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
-                
-                // Limpiar el formulario
-                registerForm.reset();
-                
-                // Cambiar a la pestaña de login
-                document.getElementById('login-tab').click();
-              } else {
-                alert('Error: ' + response.message);
-              }
-            });
-        });
-      }
-      
-      // Función para simular una petición al servidor
-      function simulateServerRequest(type, data) {
-        return new Promise((resolve) => {
-          // Simulamos una demora de red
-          setTimeout(() => {
-            // En un caso real, aquí harías una llamada fetch() o axios.post()
-            if (type === 'login') {
-              // Simular una validación simple de credenciales
-              if (data.email === 'usuario@ejemplo.com' && data.password === '12345') {
-                resolve({ success: true, message: 'Login exitoso', user: { name: 'Usuario Demo' } });
-              } else {
-                resolve({ success: false, message: 'Credenciales incorrectas' });
-              }
-            } else if (type === 'register') {
-              // Simular registro (siempre exitoso para este ejemplo)
-              resolve({ success: true, message: 'Usuario registrado correctamente' });
-            }
-          }, 1000); // Simular 1 segundo de demora
-        });
-      }
+      // Esto garantiza que la pestaña correcta se muestre al cargar la página
+      {% if active_tab == 'register' %}
+        var registerTab = new bootstrap.Tab(document.getElementById('register-tab'));
+        registerTab.show();
+      {% else %}
+        var loginTab = new bootstrap.Tab(document.getElementById('login-tab'));
+        loginTab.show();
+      {% endif %}
     });
   </script>
 </body>

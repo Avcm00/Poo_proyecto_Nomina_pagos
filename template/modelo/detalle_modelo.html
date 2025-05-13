@@ -233,7 +233,7 @@
             <a href="{% url 'editar_modelo' modelo objeto.id %}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Editar
             </a>
-            <button class="btn btn-danger" onclick="confirmarEliminacion()">
+            <button class="btn btn-danger" href="#">
                 <i class="fas fa-trash-alt"></i> Eliminar
             </button>
         </div>
@@ -243,13 +243,5 @@
 
 {% block scripts %}
 <script>
-    function confirmarEliminacion() {
-        if (confirm('¿Está seguro que desea eliminar este registro?')) {
-            // Aquí se puede hacer una solicitud AJAX para eliminar el registro
-            // O redirigir a una URL de eliminación
-            alert('Registro eliminado correctamente (simulación)');
-            window.location.href = "{% url 'listar_modelo' modelo %}";
-        }
-    }
 </script>
 {% endblock %}
